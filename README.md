@@ -1,4 +1,4 @@
-# TCAOS
+# TACOS
 Proyecto 2do Parcial 4 Semestre
 Tienda en línea para la venta de "x" producto
 Este proyecto consiste en una aplicación web desarrollada utilizando Python con Flask para el backend y JavaScript para la interacción dinámica en el frontend. Proporciona una plataforma de comercio electrónico donde los usuarios pueden explorar, comprar y gestionar productos, así como realizar un seguimiento de sus pedidos.
