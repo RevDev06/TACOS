@@ -18,7 +18,7 @@ def detectarPuerto(rutaXampp='C:/xampp/mysql/bin/my.ini'):
 
 # Uso de la función
 puerto = detectarPuerto()
-if puerto_mysql:
+if puerto:
     print(f"El puerto de mysql es {puerto}")
 else:
     print("No se pudo encontrar")
