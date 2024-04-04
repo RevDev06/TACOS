@@ -3,6 +3,20 @@ import pymysql
 
 class CBD():
 
+    def __init__(self):
+        try:
+            self.conection = pymysql.connect(host='localhost', user=self.usuarioXampp, passwd='', port=self.puertoXampp, db="bd_tacos")
+            self.cursor = self.conection.cursor()
+            print("\nCreación exitosa")
+
+        except pymysql.Error as err:
+            self.conection = pymysql.connect(host='localhost', user=self.usuarioXampp, passwd='', port=self.puertoXampp)
+            self.cursor = self.conection.cursor()
+            self.cursor.execute("CREATE DATABASE if not exists bd_tacos")
+            print("\nCreación exitosa")
+        
+
+
     def detectarPuertosXampp(rutaXampp='C:/xampp/mysql/bin/my.ini'):
         try:
             with open(rutaXampp, 'r') as archivo:
@@ -65,80 +79,52 @@ class CBD():
 
 
 
-    def crearDB(self):
-        try:
-            conection = pymysql.connect(host='localhost', user=self.usuarioXampp, passwd='', port=self.puertoXampp)
-            cursor = conection.cursor()
-            cursor.execute("CREATE DATABASE if not exists bd_tacos")
-            
-            cursor.close()
-            conection.close()
-            print("\nCreacion exitosa")
-        except pymysql.Error as err: 
-            print ("\nError al intentar la creación de la BD: {0}".format(err))
-
-
     def crearTablaUsuar(self):
         try:
-            conection = pymysql.connect(host='localhost', user=self.usuarioXampp, passwd='', port=self.puertoXampp, db="bd_tacos")
-            cursor = conection.cursor()
-            cursor.execute("CREATE TABLE if not exists usuario (id int AUTO_INCREMENT PRIMARY KEY, nombre varchar(50), apellidos varchar(50), correo varchar(60), direccion varchar(100), contraseña varchar(20), contraseña2 varchar(20))")
+            self.cursor.execute("CREATE TABLE if not exists usuario (id int AUTO_INCREMENT PRIMARY KEY, nombre varchar(50), apellidos varchar(50), correo varchar(60), direccion varchar(100), contraseña varchar(20), contraseña2 varchar(20))")
             
-            cursor.close()
-            conection.close()
         except pymysql.Error as err:
             print("\nError al crear la tabla Usuario: {0}".format(err))
 
 
     def crearTablaCate(self):
         try:
-            conection = pymysql.connect(host='localhost', user=self.usuarioXampp, passwd='', port=self.puertoXampp, db="bd_tacos")
-            cursor = conection.cursor()
-            cursor.execute("CREATE TABLE if not exists categoria (id int AUTO_INCREMENT PRIMARY KEY, nombre varchar(50))")
+            self.cursor.execute("CREATE TABLE if not exists categoria (id int AUTO_INCREMENT PRIMARY KEY, nombre varchar(50))")
             
-            cursor.close()
-            conection.close()
         except pymysql.Error as err:
             print("\nError al crear la tabla Categoría: {0}".format(err))
 
 
     def crearTablaProducts(self):
         try:
-            conection = pymysql.connect(host='localhost', user=self.usuarioXampp, passwd='', port=self.puertoXampp, db="bd_tacos")
-            cursor = conection.cursor()
-            cursor.execute("CREATE TABLE if not exists productos (id int AUTO_INCREMENT PRIMARY KEY, nombre varchar(50), descripcion varchar(300), categoria varchar(50), propiedades varchar(300), imagen longblob, tipo varchar(50), costo int, stock int)")
+            self.cursor.execute("CREATE TABLE if not exists productos (id int AUTO_INCREMENT PRIMARY KEY, nombre varchar(50), descripcion varchar(300), categoria varchar(50), propiedades varchar(300), imagen longblob, tipo varchar(50), costo int, stock int)")
             
-            cursor.close()
-            conection.close()
         except pymysql.Error as err:
             print("\nError al crear la tabla Productos: {0}".format(err))
 
     
     def crearTablaCarrito(self):
         try:
-            conection = pymysql.connect(host='localhost', user=self.usuarioXampp, passwd='', port=self.puertoXampp, db="bd_tacos")
-            cursor = conection.cursor()
-            cursor.execute("CREATE TABLE if not exists carrito (id_user int PRIMARY KEY, id_prdct int, stock_prdct int, precio_prdct int)")
+            self.cursor.execute("CREATE TABLE if not exists carrito (id_user int PRIMARY KEY, id_prdct int, stock_prdct int, precio_prdct int)")
             
-            cursor.close()
-            conection.close()
         except pymysql.Error as err:
             print("\nError al crear la tabla Carrito: {0}".format(err))
 
+    def closeDB(self):
+        self.cursor.close()
+        self.conection.close()
 
     def conectar(self):
         try:
-            self.crearDB()
             self.crearTablaUsuar()
             self.crearTablaCate()
             self.crearTablaProducts()
             self.crearTablaCarrito()
+            self.closeDB()
         except pymysql.Error as err: 
             print ("\nError al intentar la conexión: {0}".format(err))
 
 
-cbd = CBD()
-cbd.conectar()
 
 # categoria: id, nombre
 # productos: id, nombre, costo, stock, descripcion, imagen, propiedades, id_cate
