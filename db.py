@@ -13,6 +13,7 @@ class CBD():
             self.conection = pymysql.connect(host='localhost', user=self.usuarioXampp, passwd='', port=self.puertoXampp)
             self.cursor = self.conection.cursor()
             self.cursor.execute("CREATE DATABASE if not exists bd_tacos")
+            self.cursor.execute("USE bd_tacos")
             print("\nCreación exitosa")
         
 
@@ -120,7 +121,6 @@ class CBD():
             self.crearTablaCate()
             self.crearTablaProducts()
             self.crearTablaCarrito()
-            self.closeDB()
         except pymysql.Error as err: 
             print ("\nError al intentar la conexión: {0}".format(err))
 
