@@ -184,3 +184,6 @@ body {
     margin-left: 8rem;
   }
 }
+.navbar {
+  background-color: var(--bs-border-color) !important;
+}
