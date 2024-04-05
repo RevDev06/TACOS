@@ -185,29 +185,32 @@ body {
   }
 }
 
-
-.card-img-top{
+.card-img-top {
   border-radius: 2rem;
-  border-top-left-radius: 2rem!important;
-  border-top-right-radius: 2rem!important;
+  border-top-left-radius: 2rem !important;
+  border-top-right-radius: 2rem !important;
   padding: 10px;
 }
-.card{
-  border-radius: 1.5rem!important;
-  box-shadow: rgba(0, 0, 0, 0.39) 0px 40px 88px 0px;
+.card {
+  border-radius: 1.5rem !important;
+  box-shadow: rgba(0, 0, 0, 0.39) 0px 20px 36px 0px;
 }
-.card-body{
+.card-body {
   padding: 25px;
   margin-top: -15px;
 }
-.btn-primary{
-  border-radius: 50px;
+.details .btn-primary {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-left-radius: 23px !important;
+  border-bottom-right-radius: 23px !important;
   width: 120px;
 }
-.btn-primary:hover{
+.details .btn-primary:hover {
   background-color: black;
   border: none;
 }
-h3,h5{
+h3,
+h5 {
   color: rgb(0, 91, 228);
 }
