@@ -31,7 +31,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template("home.html", user_name=user_name, session=session)
 
 # R E G I S T R O
 
@@ -83,22 +83,25 @@ def crear_registro():
 def login():
     return render_template('login.html')
 
+from flask import request, render_template
+
 @app.route('/entrar_login', methods=['GET', 'POST'])
 def entrar_login():
-
+    global user_name, session
     if request.method == 'POST' and 'correo' in request.form and 'contraseña':
         _correo = request.form['correo']
         _contraseña = request.form['contraseña']
 
-
         cur = cbd.cursor
-        cur.execute('SELECT contraseña_encriptada, correo, id FROM usuario WHERE correo = %s', (_correo))
+        cur.execute('SELECT id, nombrec, correo, contraseña_encriptada FROM usuario WHERE correo = %s', (_correo,))
         user = cur.fetchone()
 
         if user:
-            contraseña_encriptada_bd = user [0]
-            correo_bd = user [1]
-            id_user = user [2]
+            id_user = user[0]
+            user_name = user[1].split()[:2]  # Dividir el nombre en las primeras dos palabras
+            correo_bd = user[2]
+            contraseña_encriptada_bd = user[3]
+
             if _correo == "admin@gmail.com" and _contraseña == 'B!1w8NAt1T^%kvhUI*S^':
                 return render_template("admin.html")
             else:
@@ -106,12 +109,12 @@ def entrar_login():
                     session['logueado'] = True
                     session['id'] = id_user
 
-                    return render_template ("home.html")
-                else: 
-                    return render_template("login.html", mensaje1="La contraseña no coincide")  
+                    return render_template("home.html", user_name=user_name, session=session)
+                else:
+                    return render_template("login.html", mensaje1="La contraseña no coincide")
         else:
-            return render_template("login.html", mensaje1 = "Por favor, ingrese su correo y contraseña")  
-    return render_template("login.html", mensaje1="Por favor, ingrese su correo y contraseña")            
+            return render_template("login.html", mensaje1="Por favor, ingrese su correo y contraseña")
+    return render_template("login.html", mensaje1="Por favor, ingrese su correo y contraseña")
 
 # T E R M I N O
 
@@ -120,6 +123,7 @@ def entrar_login():
 @app.route('/logout')
 def logout():
 
+    session.pop('username', None)
     session.pop('logueado', None)
     session.pop('id', None)
     return render_template('login.html')
@@ -135,6 +139,9 @@ def admin():
     else:
         return render_template('login.html',mensaje1 = "Esta es una vista protegida, solo para usuarios autenticados, necesitas inciar sesión como admin" )
 
+@app.route('/products')
+def products():
+    return render_template("products.html", user_name=user_name, session=session)
 
 def status_401(error):
     return redirect(url_for('login'))
@@ -143,12 +150,6 @@ def status_401(error):
 def status_404(error):
     return "<h1>Página no encontrada</h1>", 404
 
-
-# P R O D U C T S
-
-@app.route('/products')
-def products():
-    return render_template('products.html')
 
 if __name__ == '__main__':
     app.config.from_object(config['development'])

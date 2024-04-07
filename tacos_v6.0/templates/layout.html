@@ -170,14 +170,21 @@
           ><i class="bx bx-cart bx-md mt-2 me-3"></i
         ></a>
         <a class="nav-link" href="/login">
-          <i class="bx bx-user-circle bx-md mt-2 me-3"></i>
+          <!-- Aquí agregamos el código para mostrar el nombre del usuario -->
+          {% if session.get('logueado') %}
+              <a href="/" class="nav-link fs-3">{{ user_name | join(" ") }}</a>
+          {% else %}
+              <i class="bx bx-user-circle bx-md mt-2 me-3"></i>
+          {% endif %}
+        
+        
         </a>
         </div>
       </div>
     </nav>
     <!-- navbar end -->
 
-    {% block content %} {% endblock content %}
+    {% block content %} {% endblock content %}  
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
