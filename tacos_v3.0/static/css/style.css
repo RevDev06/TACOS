@@ -1,7 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
-
+@import url('https://fonts.googleapis.com/css2?family=Reddit+Mono:wght@200..900&display=swap');
 * {
-  font-family: "Roboto";
+  font-family: 'Reddit Mono';
+}
+
+:root{
+  --text-color: #1DB954;
+  --text-color2: #191414;
+  --shadows: #168d40;
 }
 input,
 input:focus,
@@ -158,6 +163,29 @@ body {
   border-bottom-left-radius: 0;
 }
 
+.form-signin input:focus, .form-signon input:focus{
+  border-color: var(--shadows);
+  box-shadow: 0px 0px 6px 1px rgba(22,141,64,1);
+}
+
+.form-signin a, .form-signon a{
+  color: var(--shadows);
+  transition: 0.4s;
+  text-decoration: none;
+}
+
+a:hover::after {
+  content: '';
+  display: block;
+  width: 0%;
+  height: 2px;
+  background-color: #007bff; /* Color del borde */
+  position: absolute;
+  bottom: -5px; /* Espacio desde la parte inferior del enlace */
+  left: 50%; /* Posicionamiento inicial desde el centro */
+  animation: underline 0.5s ease forwards; /* Nombre de la animación, duración y modo de animación */
+}
+
 .link-log {
   text-decoration: none;
   color: var(--bs-primary);
@@ -194,23 +222,87 @@ body {
 .card {
   border-radius: 1.5rem !important;
   box-shadow: rgba(0, 0, 0, 0.39) 0px 20px 36px 0px;
+  border-width: 0.2rem!important;
+  border-color: #1DB954!important;
+
+  transition: .5s;
+}
+
+.card:hover{
+  opacity: 2!important;
+  box-shadow: rgba(0, 0, 0, 0.8) 0px 10px 52px 10px;
 }
 .card-body {
   padding: 25px;
   margin-top: -15px;
 }
-.details .btn-primary {
+.details {
+  color: var(--text-color2)!important;
+  font-weight: bolder!important;
+  font-size: 2rem!important;
+  background-color: var(--text-color)!important;
+  border-color: var(--text-color)!important;
   border-top-left-radius: 0 !important;
   border-top-right-radius: 0 !important;
-  border-bottom-left-radius: 23px !important;
-  border-bottom-right-radius: 23px !important;
+  border-bottom-left-radius: 16px !important;
+  border-bottom-right-radius: 16px !important;
   width: 120px;
 }
+.details:hover{
+  background-color: var(--shadows)!important;
+  border-color: var(--shadows)!important;
+}
+
+.details 
 .details .btn-primary:hover {
   background-color: black;
   border: none;
 }
-h3,
-h5 {
-  color: rgb(0, 91, 228);
+
+.price{
+  color: var(--text-color)!important;
+  font-size: 2.4  !important;
+}
+
+.search-bar{
+  margin-left: auto!important;
+  margin-right: auto!important;
+}
+.dropdown-menu{
+  margin-left: auto!important;
+  margin-right: auto!important;
+}
+
+@media (max-width: 991px) {
+  .dropdown-menu{
+    width: 200px!important;
+  }
+}
+
+.link {
+  color: var(--text-color);
+  font-weight: 700;
+  font-size: 1.35rem;
+  position: relative;
+}
+
+@media (min-width: 0px) {
+  .link::before {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: var(--shadows);
+    color: var(--shadows);
+    visibility: hidden;
+    transition: 0.3s ease-in-out;
+  }
+
+  .link:hover::before {
+    width: 100%;
+    visibility: visible;
+  }
 }
