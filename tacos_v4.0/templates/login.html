@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<main class="form-signin w-100 mx-auto border border-3 shadow-lg text-center">
+  <form action="/entrar_login" method="POST">
+    <div style="text-align: center">
+      <h1 class="h3 mb-3 fw-normal">Iniciar sesión</h1>
+
+    </div>
+
+    {% if mensaje1 %}
+    {{mensaje1}}
+    {% endif %}
+
+    <div class="form-floating mt-5">
+      <input type="email" class="form-control" id="floatingInput" name="correo" placeholder="name@example.com" />
+      <label for="floatingInput">Email</label>
+    </div>
+
+    <div class="form-floating">
+      <input type="password" class="form-control" id="floatingPassword" name="contraseña" placeholder="Password" />
+      <label for="floatingPassword">Contraseña</label>
+    </div>
+    <div class="mt-5 mb-3">
+      <label for="floatingPassword">¿No tienes cuenta? <a href="/registro" class="link">¡Crea una!</a></label>
+    </div>
+
+    <button class="btn py-2 mt-3" type="submit">
+      Iniciar sesión
+    </button>
+  </form>
+</main>
+{% endblock content %}
