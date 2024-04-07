@@ -1,0 +1,53 @@
+{% extends "layout.html" %} {% block content %}
+
+<main class="form-signon w-100 mx-auto border border-3 shadow-lg text-center">
+  <form action="/crear_registro" method="POST">
+    <div style="text-align: center">
+      <h1 class="h3 mb-3 fw-normal">Crear cuenta</h1>
+    </div>
+
+    <div class="container">
+      {% if mensaje %}
+      {{mensaje}}
+      {% endif %}
+    </div>
+
+    <div class="form-floating mt-5">
+      <input type="email" class="form-control" id="floatingEmail" name="correo" placeholder="Correo" />
+      <label for="floatingEmail">Correo electrónico</label>
+    </div>
+    <div class="form-floating">
+      <input type="text" class="form-control" id="floatingInput" name="nombrec" placeholder="Tu nombre aquí" />
+      <label for="floatingInput">Nombre Completo</label>
+    </div>
+
+
+    <div class="form-floating">
+      <input type="text" class="form-control" id="floatingText" name="numcel" placeholder="Telefono" />
+      <label for="floatingEmail">Número teléfonico</label>
+    </div>
+
+    <div class="form-floating">
+      <input type="text" class="form-control" id="floatingText" name="direccion" placeholder="Dirección" />
+      <label for="Text">Dirección</label>
+
+      <div class="form-floating">
+        <input type="text" class="form-control" id="floatingText" name="contraseña" placeholder="Contraseña" />
+        <label for="floatingEmail">Contraseña</label>
+      </div>
+
+      <div class="form-floating">
+        <input type="password" class="form-control" id="floatingText" name="contraseña1" placeholder="Repetir" />
+        <label for="floatingPassword">Confirmar contraseña</label>
+      </div>
+
+      <div class="mt-5 mb-3">
+        <label for="floatingPassword">¿Ya tienes cuenta? <a href="/login">¡Inicia sesión!</a></label>
+      </div>
+
+      <button class="btn btn-primary py-2 mt-3" type="submit">
+        Registrar
+      </button>
+  </form>
+</main>
+{% endblock content %}
