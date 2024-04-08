@@ -262,20 +262,17 @@ def modificarPrdctInCar():
 @app.route('/verPrdct/<string:idPrdct>')
 def verProducto(idPrdct):
     idUser = user[0]
-    try:
-        cbd.cursor.execute("SELECT a.id, a.nombre, a.descripcion, a.categoria, a.propiedades, a.imagen, a.tipo, a.costo, a.stock, (SELECT quant_prdcts FROM carrito WHERE id_user=%s AND id_prdct=%s) AS productosCar FROM productos a WHERE a.id=%s", (idUser, idPrdct, idPrdct))
-        producto_list = cbd.cursor.fetchall()
 
-        producto = []
-        for prdct in producto_list:
-            idd, nombre, descrip, catego, propie, image, tipo, costo, stock, prdctsInCar = prdct
-            imagen_base64 = base64.b64encode(image).decode("utf-8")
-            producto.append((idd, nombre, descrip, catego, propie, imagen_base64, tipo, costo, stock, prdctsInCar))
+    cbd.cursor.execute("SELECT a.id, a.nombre, a.descripcion, a.categoria, a.propiedades, a.imagen, a.tipo, a.costo, a.stock, (SELECT quant_prdcts FROM carrito WHERE id_user=%s AND id_prdct=%s) AS productosCar FROM productos a WHERE a.id=%s", (idUser, idPrdct, idPrdct))
+    producto_list = cbd.cursor.fetchall()
+
+    producto = []
+    for prdct in producto_list:
+        idd, nombre, descrip, catego, propie, image, tipo, costo, stock, prdctsInCar = prdct
+        imagen_base64 = base64.b64encode(image).decode("utf-8")
+        producto.append((idd, nombre, descrip, catego, propie, imagen_base64, tipo, costo, stock, prdctsInCar))
        
-        return render_template('producto.html', producto = producto)
-    
-    except pymysql.Error as err:
-        return render_template('error.html', error = err)
+    return render_template('producto.html', producto = producto)
 
 
 @app.route('/verProductoSelec/<string:idPrdctCar>')
@@ -446,8 +443,22 @@ def comprar():
 
     except pymysql.Error as err:
         return render_template('error.html', error = err) 
- 
+    
+@app.route('/pdp/<string:idPrdct>')
+def pdp(idPrdct):
+    # Aquí deberías filtrar los productos para obtener solo el que corresponde al idPrdct
+    cbd.cursor.execute('SELECT id, nombre, descripcion, categoria, propiedades, imagen, tipo, costo, stock FROM productos WHERE id = %s', (idPrdct,))
+    producto = cbd.cursor.fetchone()
 
+    if producto:  # Verifica si se encontró un producto con el ID dado
+        idd, nombre, descripcion, categoria,propiedades, imagen, tipo, costo, stock = producto
+        imagen_base64 = base64.b64encode(imagen).decode("utf-8")
+        producto = (idd, nombre, descripcion, categoria, propiedades, imagen_base64, tipo, costo, stock)
+        return render_template('pdp.html', product=producto, session=session, user_name=user_name)
+    else:
+        # Si no se encontró el producto, puedes manejarlo como quieras, por ejemplo, mostrar un error.
+        return "Producto no encontrado"
+    
 def status_401(error):
     return redirect(url_for('login'))
 

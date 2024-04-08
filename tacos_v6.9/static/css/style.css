@@ -163,9 +163,9 @@ body {
   border-bottom-left-radius: 0;
 }
 
-.form-signin input:focus, .form-signon input:focus{
-  border-color: var(--shadows);
-  box-shadow: 0px 0px 6px 1px rgba(22,141,64,1);
+.form-signin input:focus, .form-signon input:focus, .form-control input:focus{
+  border-color: var(--shadows)!important;
+  box-shadow: 0px 0px 6px 1px rgba(22,141,64,1)!important;
 }
 
 .form-signin a, .form-signon a{
@@ -322,4 +322,29 @@ i:hover{
   background-color: transparent!important;
   border-color: transparent!important;
   border: none;
+}
+
+.text-color{
+  color: var(--text-color);
+}
+
+.tarjeta {
+  border-radius: 1.5rem !important;
+  box-shadow: rgba(0, 0, 0, 0.39) 0px 10px 18px 0px;
+  border-width: 0.2rem!important;
+  border-color: #1DB954!important;
+  transition: .5s;
+  padding: 5rem;
+  margin-left: 4rem;
+}
+
+.tarjeta:hover{
+  opacity: 2!important;
+  box-shadow: rgba(0, 0, 0, 0.8) 0px 10px 52px 10px;
+}
+
+.tarjeta-img{
+  border: 0.5rem solid;
+  border-color: #1DB954;
+  border-radius: 1rem;
 }

@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <div class="container tarjeta" style="margin-top: 9rem;">
+    <div class="row">
+      <div class="col-lg-6 ">
+        <img src="data:{{ product[6] }};base64,{{ product[5] }}" alt="Product Image" class="img-fluid tarjeta-img">
+      </div>
+      <div class="col-lg-6">
+        <h1 class="mb-4">{{ product[1] }}</h1>
+        <h4 class="text-color">Descripcion:</h4>
+        <p class="lead mb-4">{{ product[2] }}</p>
+        <div class="h4 mb-4">
+          <span class="me-2  text-color">Categoria:</span> 
+          <br>
+          <span class="h5 me-2"> {{ product[3] }}</span>
+          <br>
+          <span class="me-2  text-color">Propiedades:</span> 
+          <br>
+          <span class="h5 me-2"> {{ product[4] }}</span>
+        </div>
+        <div class="mb-4 fs-4">
+          <label for="quantity" class="form-label fs-4">Cantidad:</label>
+          <input type="number" id="quantity" class="form-control fs-3" value="1" min="1">
+        </div>
+        <a href="/addToCar"class="btn btn-lg me-2">Añadir al carrito</a>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
