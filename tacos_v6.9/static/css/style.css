@@ -222,6 +222,7 @@ body {
   border-top-left-radius: 2rem !important;
   border-top-right-radius: 2rem !important;
   padding: 10px;
+  max-height: 228px!important;
 }
 .card {
   border-radius: 1.5rem !important;
@@ -347,12 +348,17 @@ i:hover{
   border: 0.5rem solid;
   border-color: #1DB954;
   border-radius: 1rem;
+  width: 540px;
+  height: 330px!important;
 }
 
-.container{
+.contenido{
   color: #191414;
   font-size: 1.125rem;
   padding: 3rem;
+  margin-top: 8rem;
+  max-width: 70rem!important;
+    
 }
 
 .content{
@@ -361,3 +367,4 @@ i:hover{
   padding-left: 1rem;
   padding-right: 1rem;
 }
+
