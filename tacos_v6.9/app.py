@@ -156,20 +156,29 @@ def admin():
     else:
         return render_template('login.html',mensaje1 = "Esta es una vista protegida, solo para usuarios autenticados, necesitas inciar sesión como admin" )
 
+from flask import render_template
+
 @app.route('/products')
 def products():
-
-    cbd.cursor.execute('SELECT id, nombre, descripcion, imagen, tipo, costo, stock FROM productos')
+    cbd.cursor.execute('SELECT id, nombre, descripcion, categoria, imagen, tipo, costo, stock FROM productos')
     productos_raw = cbd.cursor.fetchall()
-
+    
     productos = []
     for producto in productos_raw:
-        idd, nombre, descripcion, imagen, tipo, costo, stock = producto
-        imagen_base64 = base64.b64encode(imagen).decode("utf-8")
-        productos.append((idd, nombre, descripcion, imagen_base64, tipo, costo, stock))
+        productos.append({
+            'id': producto[0],
+            'nombre': producto[1],
+            'descripcion': producto[2],
+            'categoria': producto[3],
+            'imagen': producto[4],
+            'tipo': producto[5],
+            'costo': producto[6],
+            'stock': producto[7]
+        })
 
-    return render_template('products.html', products = productos, session=session, user_name = user_name)
+    categorias = set([producto['tipo'] for producto in productos])
 
+    return render_template('products.html', productos=productos, categorias=categorias)
 
 
 @app.route('/guardarImg', methods=['POST'])
