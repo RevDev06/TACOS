@@ -4,6 +4,8 @@ from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required
 from PIL import Image
+from fpdf import FPDF
+from datetime import datetime
 
 import base64
 import hashlib
@@ -229,16 +231,17 @@ def mostrarImages():
 def addPrdctToCar():
     idUser = user[0]
     if request.method == 'POST':
-        idPrdct = request.args.get('id_prdct')
-        selecPrdcts = int(request.form['cantidad'])
-        costo = request.args.get('precio')
+        idPrdct = request.form['id_prdct']
+        selecPrdcts = int(request.form['cantidad'])  # Convertir a entero
+        costo = request.form['precio']  # Acceder al precio desde el formulario
     
     else:
-        idPrdct = request.args.get('id_prdct')
-        selecPrdcts = request.args.get('cantidad')
-        costo = request.args.get('precio')
+        idPrdct = request.form['id_prdct']
+        selecPrdcts = int(request.form['cantidad'])  # Convertir a entero
+        costo = request.form['precio']  # Acceder al precio desde el formulario
     
     try:
+        # Seleccionar el stock del producto
         cbd.cursor.execute("SELECT b.id_user, b.id_prdct, b.quant_prdcts, a.stock FROM carrito b JOIN productos a ON b.id_prdct=a.id WHERE b.id_user=%s and b.id_prdct=%s", (idUser, idPrdct))
         resul = cbd.cursor.fetchall()
 
@@ -249,18 +252,52 @@ def addPrdctToCar():
                 mensaje = "Has seleccionado el límite de productos a agregar"
             
             else:
+                # Restar la cantidad seleccionada del stock del producto
+                stock_restante = stock - selecPrdcts
+                # Actualizar el stock del producto en la tabla de productos
+                cbd.cursor.execute("UPDATE productos SET stock=%s WHERE id=%s", (stock_restante, idPrdct))
+                cbd.conection.commit()
+
                 cbd.cursor.execute("UPDATE carrito SET quant_prdcts=quant_prdcts + %s WHERE id_user=%s and id_prdct=%s", (selecPrdcts, idUser, idPrdct))
                 cbd.conection.commit()
 
         else:
+            # En este caso, también deberías insertar el producto en la tabla de productos
             cbd.cursor.execute("INSERT INTO carrito (id_user, id_prdct, quant_prdcts, precio_prdct) VALUES (%s, %s, %s, %s)", (idUser, idPrdct, selecPrdcts, costo))
             cbd.conection.commit()
 
-        return redirect(url_for('verProducto', idPrdct = idPrdct))
+    
+        try:
+            cbd.cursor.execute("SELECT id_prdct FROM carrito WHERE id_user=%s", (idUser))
+            prdctsInCar = cbd.cursor.fetchall()
+            
+            for it in prdctsInCar:
+                idd = it
+                cbd.cursor.execute("SELECT a.stock, b.quant_prdcts FROM productos a JOIN carrito b ON a.id = b.id_prdct WHERE a.id = %s AND b.id_user=%s", (idd, idUser))
+                productosComparar = cbd.cursor.fetchall()
 
+                stock, userCantPrdcts = productosComparar[0]
+                if (int(userCantPrdcts) > int(stock)):
+                    cbd.cursor.execute("UPDATE carrito SET quant_prdcts = %s WHERE id_user = %s AND id_prdct = %s", (stock, idUser, idd))
+
+
+            cbd.cursor.execute("SELECT a.id, a.nombre, a.descripcion, a.imagen, a.tipo, a.costo, b.quant_prdcts FROM productos a JOIN carrito b ON a.id=b.id_prdct WHERE b.id_user=%s ORDER BY a.id", (idUser))
+            data = cbd.cursor.fetchall()
+
+            infoProducts = []
+            total = 0
+            for ide in data:
+                idd, nombre, descripcion, image, tipo, costo, producsSelec = ide
+                imagen_base64 = base64.b64encode(image).decode("utf-8")
+                infoProducts.append((idd, nombre, descripcion, imagen_base64, tipo, costo, producsSelec))
+                total += int(costo) * int(producsSelec)
+
+            return render_template('carrito.html', productosCar = infoProducts, total = total)
+
+        except pymysql.Error as err:
+            return render_template('error.html', error = err)
     except pymysql.Error as err:
-        return render_template('error.html', error = err)
-
+        return render_template('error.html', error=err)
 
 @app.route('/updatePrdctInCar', methods=['GET', 'POST'])
 def modificarPrdctInCar():
@@ -440,10 +477,57 @@ def deletePrdctInBD(idPrdct):
         return render_template('error.html', error = err)
     
 
+
 @app.route('/comprar')
 def comprar():
     idUser = user[0]
     try:
+        class PDF(FPDF):
+            def header(self):
+                self.set_font('Arial', 'B', 35)
+                self.cell(0, 10, 'T C A O S - E', 0, 1, 'C')
+                self.set_font('Arial', 'B', 12)
+                self.cell(0, 10, 'Ticket de compra', 0, 1, 'C')
+
+                self.cell(0, 10, '==============================================', 0, 1, 'C')
+                self.cell(0, 10, f'Fecha y hora: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}', 0, 1, 'C')
+                self.cell(0, 10, '==============================================', 0, 1, 'C')
+                self.cell(0, 10, '==============================================', 0, 1, 'C')
+
+            def footer(self):
+                self.set_y(-15)
+                self.set_font('Arial', 'I', 8)
+                self.cell(0, 10, f'Página {self.page_no()}', 0, 0, 'C')
+
+        pdf = PDF()
+        pdf.add_page()
+        pdf.set_font('Arial', '', 12)
+
+        # CONSULTA
+        idUser = user[0]
+        cbd.cursor.execute("SELECT b.id_prdct, a.nombre, b.quant_prdcts, b.precio_prdct FROM productos a JOIN carrito b ON a.id = b.id_prdct WHERE b.id_User=%s", (idUser))
+        prdctsBought = cbd.cursor.fetchall()
+        total = 0
+        for iter in prdctsBought:
+            idd, nombre, cantPrdcts, precioPrd = iter
+            costoTotal = int(cantPrdcts) * int(precioPrd)
+            total += costoTotal
+
+            #pdf.cell(0, 10, '==============================================', 0, 1, 'C')
+            pdf.cell(0, 10, f'#{idd}  {nombre}   Cantidad de productos comprados: {cantPrdcts}  Total: ${costoTotal}', 0, 1, 'C')
+            #pdf.cell(0, 10, f'Descripción: NEGRO BUENO PARA NADA', 0, 1, 'C')
+            pdf.cell(0, 10, '==============================================', 0, 1, 'C')
+
+        pdf.cell(0, 10, '==============================================', 0, 1, 'C')
+        pdf.cell(0, 10, f'TOTAL: ${total}', 0, 1, 'C')
+        pdf.cell(0, 10, '==============================================', 0, 1, 'C')
+        pdf.cell(0, 10, 'ESTE NO ES UN COMPROBANTE FISCAL', 0, 1, 'C')
+
+        pdf_file = 'ticket_compra.pdf'
+        pdf.output(pdf_file)
+
+
+
         cbd.cursor.execute("SELECT id_prdct, quant_prdcts, precio_prdct FROM carrito WHERE id_user=%s", (idUser))
         productosEnCar = cbd.cursor.fetchall()
 
@@ -460,10 +544,62 @@ def comprar():
         cbd.cursor.execute("DELETE FROM carrito WHERE id_user=%s", (idUser))
         cbd.conection.commit()
 
-        return redirect(url_for('mostrarImages'))
+        #generarTicket()
+
+        return send_file(pdf_file, as_attachment=True)
 
     except pymysql.Error as err:
         return render_template('error.html', error = err) 
+    
+
+"""@app.route('/crearTicket')
+def generarTicket():
+    class PDF(FPDF):
+        def header(self):
+            self.set_font('Arial', 'B', 35)
+            self.cell(0, 10, 'T C A O S - E', 0, 1, 'C')
+            self.set_font('Arial', 'B', 12)
+            self.cell(0, 10, 'Ticket de compra', 0, 1, 'C')
+
+            self.cell(0, 10, '==============================================', 0, 1, 'C')
+            self.cell(0, 10, f'Fecha y hora: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}', 0, 1, 'C')
+            self.cell(0, 10, '==============================================', 0, 1, 'C')
+            self.cell(0, 10, '==============================================', 0, 1, 'C')
+
+        def footer(self):
+            self.set_y(-15)
+            self.set_font('Arial', 'I', 8)
+            self.cell(0, 10, f'Página {self.page_no()}', 0, 0, 'C')
+
+    pdf = PDF()
+    pdf.add_page()
+    pdf.set_font('Arial', '', 12)
+
+    # CONSULTA
+    idUser = ses.idUsuario
+    cbd.cursor.execute("SELECT b.id_prdct, a.nombre, b.quant_prdcts, b.precio_prdct FROM productos a JOIN carrito b ON a.id = b.id_prdct WHERE b.id_User=%s", (idUser))
+    prdctsBought = cbd.cursor.fetchall()
+    total = 0
+    for iter in prdctsBought:
+        idd, nombre, cantPrdcts, precioPrd = iter
+        costoTotal = int(cantPrdcts) * int(precioPrd)
+        total += costoTotal
+
+        #pdf.cell(0, 10, '==============================================', 0, 1, 'C')
+        pdf.cell(0, 10, f'#{idd}  {nombre}   Cantidad de productos comprados: {cantPrdcts}  Total: ${costoTotal}', 0, 1, 'C')
+        #pdf.cell(0, 10, f'Descripción: NEGRO BUENO PARA NADA', 0, 1, 'C')
+        pdf.cell(0, 10, '==============================================', 0, 1, 'C')
+
+    pdf.cell(0, 10, '==============================================', 0, 1, 'C')
+    pdf.cell(0, 10, f'TOTAL: ${total}', 0, 1, 'C')
+    pdf.cell(0, 10, '==============================================', 0, 1, 'C')
+    pdf.cell(0, 10, 'ESTE NO ES UN COMPROBANTE FISCAL', 0, 1, 'C')
+
+    pdf_file = 'ticket_compra.pdf'
+    pdf.output(pdf_file)
+
+    return send_file(pdf_file, as_attachment=True)"""
+
     
 @app.route('/pdp/<string:idPrdct>')
 def pdp(idPrdct):

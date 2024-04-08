@@ -1,41 +1,54 @@
-{% extends "layout.html" %} {% block content %}
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-5">
     <nav>
-        <ul>
-            <li><a href="/admin">Registrar producto</a></li>
-            <li><a href="/showPrdctsAd">Leer productos para admin</a></li>
-            <li><a href="/mostrarImgs">Mostrar productos a ususario</a></li>
-            <li><a href="/carrito">Carrito</a></li>
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link active" href="/admin">Registrar producto</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/showPrdctsAd">Leer productos para admin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/mostrarImgs">Mostrar productos a usuario</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/carrito">Carrito</a>
+            </li>
         </ul>
     </nav>
     <br><br><br>
 
-    <center>
-        <table border="2">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Nombre</th>
-                    <th>Descripcion</th>
-                    <th>Imagen</th>
-                    <th>Precio</th>
-                    <th>Stock</th>
-                    <th colspan="2">Operaciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for prd in productosStore %}
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <table class="table table-bordered">
+                <thead class="thead-dark text-center">
                     <tr>
-                        <td>{{ prd[0] }} </td>
-                        <td>{{ prd[1] }} </td>
-                        <td>{{ prd[2] }} </td>
-                        <td><img src="data:{{ prd[4] }};base64,{{ prd[3] }}" alt="Imagen" style="width: 100px; height: auto;" ></td>
-                        <td>{{ prd[5] }} </td>
-                        <td>{{ prd[6] }} </td>
-                        <td><a href="/editPrdctPage/{{prd[0]}}">Editar producto</a></td>
-                        <td><a href="/eliminPrdct/{{prd[0]}}">Eliminar producto</a></td>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Imagen</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Stock</th>
+                        <th colspan="2">Operaciones</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </center>
-    {% endblock content %}
+                </thead>
+                <tbody class="text-center">
+                    {% for prd in productosStore %}
+                    <tr>
+                        <td>{{ prd[0] }}</td>
+                        <td>{{ prd[1] }}</td>
+                        <td>{{ prd[2] }}</td>
+                        <td><img src="data:{{ prd[4] }};base64,{{ prd[3] }}" alt="Imagen" style="width: 100px; height: 100px;"></td>
+                        <td>{{ prd[5] }}</td>
+                        <td>{{ prd[6] }}</td>
+                        <td><a href="/editPrdctPage/{{prd[0]}}" class="btn ">Editar producto</a></td>
+                        <td><a href="/eliminPrdct/{{prd[0]}}" class="btn ">Eliminar producto</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

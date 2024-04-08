@@ -1,28 +1,53 @@
 {% extends "layout.html" %}
 {% block content %}
+  <div class="container mt-5">
     <nav>
-        <ul>
-            <li><a href="/index">Registrar producto</a></li>
-            <li><a href="/showPrdctsAd">Leer productos para admin</a></li>
-            <li><a href="/mostrarImgs">Mostrar productos a ususario</a></li>
-            <li><a href="/carrito">Carrito</a></li>
-        </ul>
+      <ul class="nav justify-content-center">
+        <li class="nav-item">
+          <a class="nav-link active" href="/index">Registrar producto</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/showPrdctsAd">Leer productos para admin</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/mostrarImgs">Mostrar productos a usuario</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/carrito">Carrito</a>
+        </li>
+      </ul>
     </nav>
     <br><br><br>
-    
-    <center>
-        <form action="/guardarImg" method="post" enctype="multipart/form-data"> <br> <br> <br>
 
-            <input type="text" name="nombre" placeholder="Nombre..." required> <br> <br> <br>
-            <input type="text" name="descrip" placeholder="Descripcion..." required> <br> <br> <br>
-            <input type="text" name="categoria" placeholder="Categoría..." required> <br> <br> <br>
-            <input type="text" name="propied" placeholder="Propiedades" required> <br> <br> <br>
-            <input type="file" name="imagen" required> <br> <br><br>
-            <input type="number" name="costo" placeholder="Precio..." min="0" required> <br> <br> <br>
-            <input type="number" name="stock" placeholder="Cantidad disponible" min="1" required> <br> <br> <br>
-            <input type="submit" value="Aceptar">
-            
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <form action="/guardarImg" method="post" enctype="multipart/form-data">
+          <div class="mb-3">
+            <input type="text" class="form-control" name="nombre" placeholder="Nombre..." required>
+          </div>
+          <div class="mb-3">
+            <input type="text" class="form-control" name="descrip" placeholder="Descripción..." required>
+          </div>
+          <div class="mb-3">
+            <input type="text" class="form-control" name="categoria" placeholder="Categoría..." required>
+          </div>
+          <div class="mb-3">
+            <input type="text" class="form-control" name="propied" placeholder="Propiedades..." required>
+          </div>
+          <div class="mb-3">
+            <input type="file" class="form-control" name="imagen" required>
+          </div>
+          <div class="mb-3">
+            <input type="number" class="form-control" name="costo" placeholder="Precio..." min="0" required>
+          </div>
+          <div class="mb-3">
+            <input type="number" class="form-control" name="stock" placeholder="Cantidad disponible" min="1" required>
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary">Aceptar</button>
+          </div>
         </form>
-    </center>
-
+      </div>
+    </div>
+  </div>
 {% endblock content %}
