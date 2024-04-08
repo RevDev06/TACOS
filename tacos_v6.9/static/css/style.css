@@ -368,3 +368,26 @@ i:hover{
   padding-right: 1rem;
 }
 
+.footer{
+  margin-top: 20rem!important;
+}
+
+.footer h4{
+  margin-bottom: 0;
+}
+
+.footer a{
+  text-decoration: none;
+  color: #489cc1;
+  font-size: larger;
+  transition: 0.2s ease-in;
+}
+
+.footer a:hover{
+  color: #36b7ef ;
+}
+
+.footer small span{
+  margin-top: 2rem;
+  color: #44a680;
+}
