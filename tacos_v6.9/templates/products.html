@@ -3,21 +3,21 @@
 <div class="container py-5">
   <h1 class="fs-1 text-left ps-2 pb-4 border-bottom border-5">Productos</h1>
   <div class="row row-cols-1 row-cols-md-3 g-4 py-5 mx-2">
-    {% for img in products %}
-    <div class="col">
+    {% for productos in products %}
+    <div class="col category-card {{productos[3]}}">
       <div class="card">
-        <img src="data: {{ img[4] }};base64,{{ img[3] }}" class="card-img-top " style="max-height: 260px" alt="..." />
+        <img src="data: {{ productos[5] }};base64,{{ productos[4] }}" class="card-img-top " style="max-height: 2600px" alt="..." />
         <div class="card-body">
-          <h5 class="h2 card-title mt-2">{{img[1]}}</h5>
+          <h5 class="h2 card-title mt-2">{{productos[1]}}</h5>
           <p class="card-text">
-            {{img[2]}}
+            {{productos[2]}}
             <br>
           </p>
         </div>
         <div class="mb-2 d-flex justify-content-around">
-          <h3 class="price py-2">${{img[5]}}</h3>
+          <h3 class="price py-2">${{productos[6]}}</h3>
         </div>
-        <a href="/pdp/{{img[0]}}" class="w-100 details btn py-3">Ver detalles</a>
+        <a href="/pdp/{{productos[0]}}" class="w-100 details btn py-3">Ver detalles</a>
       </div>
     </div>
     {% endfor %}

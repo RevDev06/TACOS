@@ -159,17 +159,38 @@ def admin():
 @app.route('/products')
 def products():
 
-    cbd.cursor.execute('SELECT id, nombre, descripcion, imagen, tipo, costo, stock FROM productos')
+    cbd.cursor.execute('SELECT id, nombre, descripcion,categoria, imagen, tipo, costo, stock FROM productos')
     productos_raw = cbd.cursor.fetchall()
 
     productos = []
     for producto in productos_raw:
-        idd, nombre, descripcion, imagen, tipo, costo, stock = producto
+        idd, nombre, descripcion, categoria, imagen, tipo, costo, stock = producto
         imagen_base64 = base64.b64encode(imagen).decode("utf-8")
-        productos.append((idd, nombre, descripcion, imagen_base64, tipo, costo, stock))
+        productos.append((idd, nombre, descripcion, categoria,imagen_base64, tipo, costo, stock))
+    categorias = set([producto[3] for producto in productos])
+    return render_template('products.html', products = productos, session=session, user_name = user_name, categorias=categorias)
 
-    return render_template('products.html', products = productos, session=session, user_name = user_name)
+# @app.route('/products')
+# def products():
+#     cbd.cursor.execute('SELECT id, nombre, descripcion, categoria, imagen, tipo, costo, stock FROM productos')
+#     productos_raw = cbd.cursor.fetchall()
+    
+#     productos = []
+#     for producto in productos_raw:
+#         productos.append({
+#             'id': producto[0],
+#             'nombre': producto[1],
+#             'descripcion': producto[2],
+#             'categoria': producto[3],
+#             'imagen': producto[4],
+#             'tipo': producto[5],
+#             'costo': producto[6],
+#             'stock': producto[7]
+#         })
 
+#     categorias = set([producto['tipo'] for producto in productos])
+
+#     return render_template('products.html', productos=productos, categorias=categorias)
 
 
 @app.route('/guardarImg', methods=['POST'])
