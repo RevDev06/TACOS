@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar producto</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/index">Registrar producto</a></li>
+            <li><a href="/showPrdctsAd">Leer productos para admin</a></li>
+            <li><a href="/mostrarImgs">Mostrar productos a ususario</a></li>
+            <li><a href="/carrito">Carrito</a></li>
+        </ul>
+    </nav>
+    <br><br><br>
+    
+    <center>
+        <form action="{{url_for('editPrdctBD', idPrd=datosPrd[0][0] )}}" method="post" enctype="multipart/form-data"> <br> <br> <br>
+
+            <input type="text" name="nombre" placeholder="Nombre..." value="{{ datosPrd[0][1] }}" required> <br> <br> <br>
+            <input type="text" name="descrip" placeholder="Descripcion..." value="{{ datosPrd[0][2] }}" required> <br> <br> <br>
+            <input type="text" name="categoria" placeholder="Categoría..." value="{{ datosPrd[0][3] }}" required> <br> <br> <br>
+            <input type="text" name="propied" placeholder="Propiedades" value="{{ datosPrd[0][4] }}" required> <br> <br> <br>
+            <img src="data:{{ datosPrd[0][6] }};base64,{{ datosPrd[0][5] }}" alt="Imagen" style="width: 180px; height: auto;">
+            <input type="file" name="imagen" required> <br> <br><br>
+            <input type="number" name="costo" placeholder="Precio..." min="0" value="{{datosPrd[0][7]}}" required> <br> <br> <br>
+            <input type="number" name="stock" placeholder="Cantidad disponible" min="1" value="{{datosPrd[0][8]}}" required> <br> <br> <br>
+            <input type="submit" value="Aceptar">
+            
+        </form>
+    </center>
+</body>
+</html>

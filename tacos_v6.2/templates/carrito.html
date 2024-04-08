@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito</title>
+</head>
+<body>
+    
+    <nav>
+        <ul>
+            <li><a href="/index">Registrar producto</a></li>
+            <li><a href="/showPrdctsAd">Leer productos para admin</a></li>
+            <li><a href="/mostrarImgs">Mostrar productos a ususario</a></li>
+            <li><a href="/carrito">Carrito</a></li>
+        </ul>
+    </nav>
+    <br><br><br>
+
+    <center>
+        <table border="2">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+                    <th>Imagen</th>
+                    <th>Costo</th>
+                    <th>Productos seleccionados</th>
+                    <th colspan="2">Operación</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productosCar %}
+                    <tr>
+                        <td>{{ producto[0] }} </td>
+                        <td>{{ producto[1] }} </td>
+                        <td>{{ producto[2] }}</td>
+                        <td><img src="data:{{ producto[4] }};base64,{{ producto[3] }} " style="width: 100px; height: auto;"></td>
+                        <td>{{ producto[5] }}</td>
+                        <td>{{ producto[6] }}</td>
+                        <td><a href="/verProductoSelec/{{producto[0]}}">Ver producto</a></td>
+                        <td><a href="/eliminarPrdctCar/{{ producto[0] }}">Eliminar</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h3>Total a pagar: ${{total}}</h3>
+
+        <a href="/comprar"><button>Comprar</button></a>
+    </center>
+
+</body>
+</html>

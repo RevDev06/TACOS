@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Producto en el carrito</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/index">Registrar producto</a></li>
+            <li><a href="/showPrdctsAd">Leer productos para admin</a></li>
+            <li><a href="/mostrarImgs">Mostrar productos a ususario</a></li>
+            <li><a href="/carrito">Carrito</a></li>
+        </ul>
+    </nav>
+    <br><br><br>
+
+    <center>
+        <table border="2">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+                    <th>Categoría</th>
+                    <th>Propiedades</th>
+                    <th>Imagen</th>
+                    <th>Costo</th>
+                    <th>Stock</th>
+                    <th>Productos seleccionados</th>
+                    <th>Precio total</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productoCar %}
+                    <tr>
+                        <td>{{ producto[0] }} </td>
+                        <td>{{ producto[1] }} </td>
+                        <td>{{ producto[2] }}</td>
+                        <td>{{ producto[3] }}</td>
+                        <td>{{ producto[4] }}</td>
+                        <td><img src="data:{{ producto[6] }};base64,{{ producto[5] }} " style="width: 100px; height: auto;"></td>
+                        <td>{{ producto[7] }}</td>
+                        <td>{{ producto[8] }}</td>
+                        <td>
+                            <form action="{{url_for('modificarPrdctInCar', id_prdct=producto[0], precio=producto[7] )}}" name="form" method="post">
+                                <input type="number" id="cant" name="cantidad" min="1" max="{{ producto[8] }}" value="{{ producto[9] }}" required>  <br> <br>
+                                <input type="button" value="Guardar" id="save">
+                                <input type="button" value="+" id="sum">
+                                <input type="button" value="-" id="res">
+                            </form>
+                        </td>
+                        <td>{{ producto[10] }}</td>
+                        <td><a href="/eliminarPrdctCar/{{ producto[0] }}">Eliminar</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </center>
+    
+    <script>
+        const botonSave = document.getElementById('save');
+        const sumar = document.getElementById('sum');
+        const restar = document.getElementById('res');
+        var stock = parseInt("{{ productoCar[0][8] }}");
+
+        botonSave.addEventListener('click', enviar);
+        sumar.addEventListener('click', aumentar);
+        restar.addEventListener('click', disminuir);
+        document.form.addEventListener('input', controlar);
+
+
+        function enviar() {
+            var cantPrdcts = parseFloat(document.getElementById('cant').value);
+            
+            if (isNaN(cantPrdcts)) {
+                alert("Si no quiere ningun producto, de click en Eliminar.");
+
+            } else if (cantPrdcts % 1 !== 0) {
+                alert("Debe ser un número entero.");
+
+            } else if (cantPrdcts>stock || cantPrdcts<1 ){
+                alert("No puede seleccionar más de la cantidad disponible, ni seleccionar menos de 1 producto.");
+
+            } else {
+                var valido = document.form.checkValidity();
+                if (valido) {
+                    document.form.submit();
+                }
+            }
+        }
+
+
+        function aumentar() {
+            var cantPrdcts = parseFloat(document.getElementById('cant').value);
+            
+            if (cantPrdcts>=stock) {
+                sumar.disabled = true;
+                restar.disabled = false;
+
+            } else if (cantPrdcts === (stock-1)) {
+                document.getElementById('cant').value = cantPrdcts + 1;
+                sumar.disabled = true;
+                restar.disabled = false;
+
+            } else {
+                document.getElementById('cant').value = cantPrdcts + 1;
+                restar.disabled = false;
+            }
+        }
+
+        function disminuir() {
+            var cantPrdcts = parseFloat(document.getElementById('cant').value);
+
+            if (cantPrdcts < 2) {
+                restar.disabled = true;
+                sumar.disabled = false;
+
+            } else if (cantPrdcts === 2) {
+                document.getElementById('cant').value = cantPrdcts - 1;
+                restar.disabled = true;
+                sumar.disabled = false;
+
+            } else {
+                document.getElementById('cant').value = cantPrdcts - 1;
+                sumar.disabled = false;
+            }
+        }
+
+
+        function controlar(e) {
+            var elemento = e.target;
+            if (elemento.validity.valid) {
+                elemento.style.background = '#FFFFFF';
+            } else {
+                elemento.style.background = '#FFDDDD';
+            }
+        }
+        
+    </script>
+</body>
+</html>

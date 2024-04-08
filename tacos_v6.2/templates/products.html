@@ -1,0 +1,30 @@
+{% extends "layout.html" %} {% block content %}
+
+<div class="container py-5">
+  <h1 class="fs-1 text-left ps-2 pb-4 border-bottom border-5">Productos</h1>
+  <div class="row row-cols-1 row-cols-md-3 g-4 py-5 mx-2">
+    {% for img in products %}
+    <div class="col">
+      <div class="card">
+        <img src="data: {{ img[4] }};base64,{{ img[3] }}" class="card-img-top" alt="..." />
+        <div class="card-body">
+          <h5 class="h2 card-title mt-2">{{img[1]}}</h5>
+          <p class="card-text">
+            {{img[2]}}
+            <br>
+            <br>
+            {{img[]}}
+          </p>
+        </div>
+        <div class="mb-2 d-flex justify-content-around">
+          <h3 class="price py-2">${{img[5]}}</h3>
+        </div>
+        <a href="" class="w-100 details btn py-3">Ver detalles</a>
+      </div>
+    </div>
+    {% endfor %}
+    
+
+
+
+{% endblock content %}

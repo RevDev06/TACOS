@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+    <nav>
+        <ul>
+            <li><a href="/index">Registrar producto</a></li>
+            <li><a href="/showPrdctsAd">Leer productos para admin</a></li>
+            <li><a href="/mostrarImgs">Mostrar productos a ususario</a></li>
+            <li><a href="/carrito">Carrito</a></li>
+        </ul>
+    </nav>
+    <br><br><br>
+    
+    <center>
+        <form action="/guardarImg" method="post" enctype="multipart/form-data"> <br> <br> <br>
+
+            <input type="text" name="nombre" placeholder="Nombre..." required> <br> <br> <br>
+            <input type="text" name="descrip" placeholder="Descripcion..." required> <br> <br> <br>
+            <input type="text" name="categoria" placeholder="Categoría..." required> <br> <br> <br>
+            <input type="text" name="propied" placeholder="Propiedades" required> <br> <br> <br>
+            <input type="file" name="imagen" required> <br> <br><br>
+            <input type="number" name="costo" placeholder="Precio..." min="0" required> <br> <br> <br>
+            <input type="number" name="stock" placeholder="Cantidad disponible" min="1" required> <br> <br> <br>
+            <input type="submit" value="Aceptar">
+            
+        </form>
+    </center>
+
+{% endblock content %}

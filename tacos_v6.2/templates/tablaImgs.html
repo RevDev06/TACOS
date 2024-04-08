@@ -1,0 +1,68 @@
+{% extends "layout.html" %}{% block content %}
+
+    <nav>
+        <ul>
+            <li><a href="/index">Registrar producto</a></li>
+            <li><a href="/showPrdctsAd">Leer productos para admin</a></li>
+            <li><a href="/mostrarImgs">Mostrar productos a ususario</a></li>
+            <li><a href="/carrito">Carrito</a></li>
+        </ul>
+    </nav>
+    <br>
+
+    <center>
+        <table border="2">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+                    <th>Imagen</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Operaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for img in products %}
+                    <tr>
+                        <td>{{img[0]}} </td>
+                        <td>{{img[1]}} </td>
+                        <td>{{img[2]}}</td>
+                        <td><img src="data:{{ img[4] }};base64,{{ img[3] }}" alt="Imagen" style="width: 100px; height: auto;"> </td>
+                        <td>{{img[5]}} </td>
+                        <td>{{img[6]}}</td>
+                        <td><a href="/verPrdct/{{img[0]}}">Ver producto</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </center>
+
+    <script>
+        /*const botonesMenos = document.querySelectorAll('table tbody form .operadores #menos');
+        const botonesMas = document.querySelectorAll('table tbody form .operadores #mas');
+
+        addEventListeners();
+
+        function disminuir() {
+            var valor1 = parseInt(document.getElementById('table tbody form #cant').value);
+            document.getElementById('input').value = valor1 - 1;
+        }
+
+        function aumentar() {
+            var valor2 = parseInt(document.getElementById('table tbody form #cant').value);
+            document.getElementById('input').value = valor2 + 1;
+        }
+
+        function addEventListeners(){
+            botonesMenos.forEach (item => {
+                item.addEventListener('click', disminuir);
+            })
+
+            botonesMas.forEach (item => {
+                item.addEventListener('click', aumentar);
+            })
+        }*/
+    </script>
+{% endblock content%}

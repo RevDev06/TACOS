@@ -2,8 +2,6 @@ const productos = [
     { name: "Monitor" },
     { name: "Mouse" },
     { name: "Teclado" },
-    { name: "Tetas" },
-    { name: "Dildos para Oscar (de 70cm)" },
 ];
 
 const searchInput = document.getElementById("searchInput");
@@ -37,3 +35,6 @@ const handleSearch = () => {
 };
 
 searchInput.addEventListener("input", handleSearch);
+
+const usuario = document.getElementsByClassName('usuario');
+

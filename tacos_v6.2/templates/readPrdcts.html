@@ -1,0 +1,41 @@
+{% extends "layout.html" %} {% block content %}
+    <nav>
+        <ul>
+            <li><a href="/admin">Registrar producto</a></li>
+            <li><a href="/showPrdctsAd">Leer productos para admin</a></li>
+            <li><a href="/mostrarImgs">Mostrar productos a ususario</a></li>
+            <li><a href="/carrito">Carrito</a></li>
+        </ul>
+    </nav>
+    <br><br><br>
+
+    <center>
+        <table border="2">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+                    <th>Imagen</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th colspan="2">Operaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prd in productosStore %}
+                    <tr>
+                        <td>{{ prd[0] }} </td>
+                        <td>{{ prd[1] }} </td>
+                        <td>{{ prd[2] }} </td>
+                        <td><img src="data:{{ prd[4] }};base64,{{ prd[3] }}" alt="Imagen" style="width: 100px; height: auto;" ></td>
+                        <td>{{ prd[5] }} </td>
+                        <td>{{ prd[6] }} </td>
+                        <td><a href="/editPrdctPage/{{prd[0]}}">Editar producto</a></td>
+                        <td><a href="/eliminPrdct/{{prd[0]}}">Eliminar producto</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </center>
+    {% endblock content %}

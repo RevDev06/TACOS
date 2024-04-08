@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Producto</title>
+</head>
+<body>
+    
+    <nav>
+        <ul>
+            <li><a href="/index">Registrar producto</a></li>
+            <li><a href="/showPrdctsAd">Leer productos para admin</a></li>
+            <li><a href="/mostrarImgs">Mostrar productos a ususario</a></li>
+            <li><a href="/carrito">Carrito</a></li>
+        </ul>
+    </nav>
+    <br><br><br>
+
+    <center>
+        <table border="2">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+                    <th>Propiedades</th>
+                    <th>Imagen</th>
+                    <th>Costo</th>
+                    <th>Stock</th>
+                    <th>Operaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ producto[0][0] }}</td>
+                    <td>{{ producto[0][1] }}</td>
+                    <td>{{ producto[0][2] }}</td>
+                    <td>{{ producto[0][4] }}</td>
+                    <td><img src="data:{{ producto[0][6] }};base64,{{ producto[0][5] }}" alt="Imagen" style="width: 100px; height: auto;"> </td>
+                    <td>{{ producto[0][7] }}</td>
+                    <td>{{ producto[0][8] }} </td>
+                    <td>
+                        <form action="{{url_for('addPrdctToCar', id_prdct=producto[0][0], precio=producto[0][7] )}}" name="form" method="post">
+                            <input type="number" id="cant" name="cantidad" min="1" max="{{ producto[0][8] }}" placeholder="Agregue a su carrito" required>  <br> <br>
+                            <input type="button" id="agregar" value="Agregar">
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </center>
+
+    <script>
+        const botonAgregar = document.getElementById('agregar');
+        botonAgregar.addEventListener('click', enviar);
+        
+        function enviar() {
+            var stock = parseInt("{{ producto[0][8] }}");
+            var productosEnCar = "{{ producto[0][9] }}";
+            var productosSelec = parseFloat(document.getElementById('cant').value);
+            
+            if (productosEnCar === "None") {
+                productosEnCar = 0;
+                alert(productosEnCar);
+
+            } else {
+                productosEnCar = parseInt(productosEnCar);
+                alert(productosEnCar);
+            }
+
+            if (isNaN(productosSelec)) {
+                alert("Si desea agregar este producto al carrito, debe ingresar la cantidad que desea.");
+            
+            } else if (productosSelec<1) {
+                alert("Ingrese un número igual o mayor a uno.");
+
+            } else if (productosSelec % 1 !== 0) { 
+                alert("Ingrese un número entero.");
+            
+            } else {
+                if ((productosSelec + productosEnCar) > stock) {
+                    alert("Ha excedido la cantidad de productos disponibles en la tienda: "+ (productosSelec + productosEnCar) +". Solo hay "+ stock +" productos");
+                
+                } else {
+                    document.form.submit();
+                } 
+            }      
+        }
+    </script>
+</body>
+</html>

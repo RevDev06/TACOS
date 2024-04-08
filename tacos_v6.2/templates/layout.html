@@ -16,6 +16,7 @@
       rel="stylesheet"
     />
     <script src="/static/js/color-modes.js"></script>
+    <script src="/static/js/confirm.js"></script>
     <title>TCAOS-E</title>
   </head>
   <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -157,26 +158,25 @@
               </ul>
             </li>
           </ul>
-          <form class="d-flex w-50 search-bar" role="search">
+          <div class="d-flex w-50 search-bar" role="search">
             <input
               class="form-control me-2"
               type="search"
               placeholder="Busca aquí..."
               aria-label="Search"
             />
-            <button class="btn search" style="width: 4rem;" type="submit"><i class='bx bx-search-alt bx-md' ></i></button>
-          </form>
+            <button class="search" style="width: 4rem;" type="submit"><i class='bx bx-search-alt bx-md' ></i></button>
+          </div>
           <a class="nav-link" href="#"
-          ><i class="bx bx-cart bx-md mt-2 me-3"></i
+          ><i class="bx bx-cart bx-md mt-2 me-2"></i
         ></a>
         <a class="nav-link" href="/login">
           <!-- Aquí agregamos el código para mostrar el nombre del usuario -->
           {% if session.get('logueado') %}
-              <a href="/" class="nav-link fs-3">{{ user_name | join(" ") }}</a>
+              <a href="/logout" class="nav-link fs-3 ms-2 usuario">| {{ user_name | join(" ") }} |</a>
           {% else %}
               <i class="bx bx-user-circle bx-md mt-2 me-3"></i>
           {% endif %}
-        
         
         </a>
         </div>
