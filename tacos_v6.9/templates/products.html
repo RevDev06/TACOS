@@ -6,7 +6,7 @@
     {% for img in products %}
     <div class="col">
       <div class="card">
-        <img src="data: {{ img[4] }};base64,{{ img[3] }}" class="card-img-top" alt="..." />
+        <img src="data: {{ img[4] }};base64,{{ img[3] }}" class="card-img-top " style="max-height: 260px" alt="..." />
         <div class="card-body">
           <h5 class="h2 card-title mt-2">{{img[1]}}</h5>
           <p class="card-text">
